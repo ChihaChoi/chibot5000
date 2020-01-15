@@ -227,4 +227,4 @@ function addText(image, text, textPosition, textBoxSize, font ){
 };
 
 // Log our bot in using the token from https://discordapp.com/developers/applications/me
-client.login('NjY3MDYwMjA0Njc1OTIzOTg0.Xh9OcQ.UTaQ0keHrrMEAYvuI4902ze6W_Q');
+client.login(process.env.BOT_TOKEN);
