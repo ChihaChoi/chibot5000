@@ -166,9 +166,9 @@ function wegetitdan(message,args){
 }
 
 function distracted(message,args){
-    const firstText = [190,380]
-    const secondText = [500,380]
-    const thirdText = [700,380]
+    const firstText = [190,280]
+    const secondText = [500,280]
+    const thirdText = [700,280]
     const textSize = [200,300]
     sendImage(message, args, 'distracted.jpg', [firstText,secondText,thirdText], textSize, yAlign=Jimp.VERTICAL_ALIGN_TOP)
 }
