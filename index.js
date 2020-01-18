@@ -1,135 +1,12 @@
 // Extract the required classes from the discord.js module
 const { Client, Attachment } = require('discord.js');
-
 const Jimp = require("jimp");
 const Canvas = require("canvas")
-
-
-// Create an instance of a Discord client
 const client = new Client();
 
-//TECH DEBT
-// convert legacy coordinates into new coordinates for pre 2.0 memes
-function newCoord(arr, height){
-    const ratio = height/300
-    const newCoordinates = []
-    arr.forEach((number)=>{
-        newCoordinates.push(number/ratio)
-    })
-    return newCoordinates
-}
+const memeList = require('./memes')
 
-const memeList = [
-    {
-        name:'mchale',
-        textBoxes: [{
-            name: 'mchale',
-            position: [71,88],
-            textPosition : [130,61]
-        },{
-            name: 'booze',
-            position: [55,167],
-            // textOffset : []
-        }]
-    },
-    {
-        name:'cryglasses',
-        textBoxes: [{
-            name: 'top',
-            position: newCoord([80,20],225)
-        }]
-    },
-    {
-        name:'handshake',
-        textBoxes: [{
-            name: 'lefthand',
-            position: newCoord([275,500],645)
-        },{
-            name: 'righthand',
-            position: newCoord([680,390],645)
-        },{
-            name: 'handshake',
-            position: newCoord([380,100],645)
-        }]
-    },
-    {
-        name:'wtfamireading',
-        textBoxes: [{
-            name: 'top',
-            position: newCoord([177,80], 834)
-        },{
-            name: 'bot',
-            position: newCoord([200,681], 834)
-        }]
-    },
-    {
-        name:'jasonface',
-        textBoxes: [{
-            name: 'face',
-            position: newCoord([267,476],800)
-        }]
-    },
-    {
-        name:'lava',
-        textBoxes: [{
-            name: 'guy',
-            position: newCoord([380,80],602)
-        },{
-            name: 'lava',
-            position: newCoord([380,400],602)
-        }]
-    },
-    {
-        name:'burninghouse',
-        textBoxes: [{
-            name: 'house',
-            position: newCoord([130,60],375)
-        },{
-            name: 'kid',
-            position: newCoord([230,310],375)
-        }]
-    },
-    {
-        name:'flextape',
-        textBoxes: [{
-            name: 'guy',
-            position: newCoord([600,500],2160)
-        },{
-            name: 'tape',
-            position: newCoord([300,1610],2160)
-        }]
-    },
-    {
-        name:'nelson',
-        textBoxes: [{
-            name: 'nelson',
-            position: newCoord([190,220],705)
-        },{
-            name: 'viewers',
-            position: newCoord([530,500],705)
-        }]
-    },
-    {
-        name:'wegetitdan',
-        textBoxes:  [{
-            name: 'dan',
-            position: newCoord([370,670],900)
-    }]
-    },
-    {
-        name: 'distracted',
-        textBoxes: [{
-            name: 'spicy piece of ass',
-            position :newCoord( [190,280],450)
-        },{
-            name: 'bf',
-            position: newCoord([500,280],450)
-        },{
-            name: 'gf',
-            position: newCoord([700,280],450)
-        }]
-    }
-]
+
 // populate list of memes for help function
 var memeNames = []
 memeList.forEach((e)=>{
@@ -146,7 +23,7 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-    if (message.content[0] === '$'){
+    if (message.content[0] === '£'){
         const command = message.content.slice(1).split(' ')[0]
         const args = message.content.substring(message.content.indexOf(' ')+1).split(',,')
         console.log(args)
@@ -189,40 +66,37 @@ function createMeme(message, args, meme){
     })
     // =======================
     console.log(textLocations)
-    sendImage(message, args, meme.name, textLocations, [150,100])
 
-}
-
-function sendImage(message, text, image, textPositions, texboxSize, fontSize){
-    fontSize = fontSize || 20
-    
     //load up image and canvas, then paste image onto canvas
     var Image = Canvas.Image;
     var img = new Image();
-    img.src = `resized images/${image}.jpg`;
+    img.src = `resized images/${meme.name}.jpg`;
     const canvas = Canvas.createCanvas(img.width, img.height);
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     //===================================
     
-    
-    text.forEach((textContent, i)=>{
-        // Select the font size and type from one of the natively available fonts
-        ctx.font = `${fontSize}px comic sans MS`;
-        ctx.fillStyle = '#ffffff';
-        ctx.textAlign = "center"; 
-        ctx.textAlign = "center"; 
-        // Actually fill the text with a solid color
-        wrapText(ctx, textContent, textPositions[i][0],textPositions[i][1], texboxSize[0],fontSize)
-        // ctx.fillText(textContent, textPositions[i][0],textPositions[i][1]);
+    args.forEach((textContent, i)=>{
+        attachText(img, ctx, textContent, meme.textBoxes[i])
     })
     
-	// Use helpful Attachment class structure to process the file for you
-	const attachment = new Attachment(canvas.toBuffer(), 'welcome-image.png');
+    // Use helpful Attachment class structure to process the file for you
+    const attachment = new Attachment(canvas.toBuffer(), 'welcome-image.png');
+    message.channel.send(attachment);
 
-	message.channel.send(attachment);
+}
 
+function attachText(img, ctx, text, format){
+     // formulate font size from image width and length of text string
+     const fontSize = 6 + img.width / 14 - text.length/7
 
+     ctx.font = `${fontSize}px comic sans MS`;
+     ctx.fillStyle = '#ffffff';
+     ctx.textAlign = "center"; 
+     ctx.textAlign = "center"; 
+     // Actually fill the text with a solid color
+     wrapText(ctx, text, format.position[0],format.position[1], img.width/5 + 130 ,fontSize) //feature req change width sizing
+     // ctx.fillText(textContent, textPositions[i][0],textPositions[i][1]);
 }
 
 //copy and pasted from
@@ -248,7 +122,5 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
   }
 
 
-
 // Log our bot in using the token from https://discordapp.com/developers/applications/me
-// client.login('NjY3NDgxNDA5MTIzNzc4NjAw.XiDXXw.FaQmEXa_yqJs2fQGKpxFHVyOgAo');
 client.login(process.env.BOT_TOKEN);
