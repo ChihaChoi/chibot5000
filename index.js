@@ -1,56 +1,133 @@
 // Extract the required classes from the discord.js module
 const { Client, Attachment } = require('discord.js');
 
-var Jimp = require("jimp");
+const Jimp = require("jimp");
+const Canvas = require("canvas")
 
 
 // Create an instance of a Discord client
 const client = new Client();
 
+//TECH DEBT
+// convert legacy coordinates into new coordinates for pre 2.0 memes
+function newCoord(arr, height){
+    const ratio = height/300
+    const newCoordinates = []
+    arr.forEach((number)=>{
+        newCoordinates.push(number/ratio)
+    })
+    return newCoordinates
+}
+
 const memeList = [
     {
         name:'mchale',
-        textNames: ['mchale','booze']
+        textBoxes: [{
+            name: 'mchale',
+            position: [71,88],
+            textPosition : [130,61]
+        },{
+            name: 'booze',
+            position: [55,167],
+            // textOffset : []
+        }]
     },
     {
         name:'cryglasses',
-        textNames: ['top']
+        textBoxes: [{
+            name: 'top',
+            position: newCoord([80,20],225)
+        }]
     },
     {
         name:'handshake',
-        textNames: ['lefthand','righthand','handshake']
+        textBoxes: [{
+            name: 'lefthand',
+            position: newCoord([275,500],645)
+        },{
+            name: 'righthand',
+            position: newCoord([680,390],645)
+        },{
+            name: 'handshake',
+            position: newCoord([380,100],645)
+        }]
     },
     {
         name:'wtfamireading',
-        textNames: ['top','bot']
+        textBoxes: [{
+            name: 'top',
+            position: newCoord([177,80], 834)
+        },{
+            name: 'bot',
+            position: newCoord([200,681], 834)
+        }]
     },
     {
         name:'jasonface',
-        textNames: ['face text']
+        textBoxes: [{
+            name: 'face',
+            position: newCoord([267,476],800)
+        }]
     },
     {
         name:'lava',
-        textNames: ['guy','lava']
+        textBoxes: [{
+            name: 'guy',
+            position: newCoord([380,80],602)
+        },{
+            name: 'lava',
+            position: newCoord([380,400],602)
+        }]
     },
     {
         name:'burninghouse',
-        textNames: ['house','kid']
+        textBoxes: [{
+            name: 'house',
+            position: newCoord([130,60],375)
+        },{
+            name: 'kid',
+            position: newCoord([230,310],375)
+        }]
     },
     {
         name:'flextape',
-        textNames: ['guy','tape']
+        textBoxes: [{
+            name: 'guy',
+            position: newCoord([600,500],2160)
+        },{
+            name: 'tape',
+            position: newCoord([300,1610],2160)
+        }]
     },
     {
         name:'nelson',
-        textNames: ['nelson','viewers']
+        textBoxes: [{
+            name: 'nelson',
+            position: newCoord([190,220],705)
+        },{
+            name: 'viewers',
+            position: newCoord([530,500],705)
+        }]
     },
     {
         name:'wegetitdan',
-        textNames:  ['dan']
+        textBoxes:  [{
+            name: 'dan',
+            position: newCoord([370,670],900)
+    }]
     },
     {
         name: 'distracted',
-        textNames: ['spicy piece of ass','bf','gf']
+        textBoxes: [{
+            name: 'spicy piece of ass',
+            position :newCoord( [190,280],450)
+        },{
+            name: 'bf',
+            position: newCoord([500,280],450)
+        },{
+            name: 'gf',
+            position: newCoord([700,280],450)
+        }]
     }
 ]
 // populate list of memes for help function
@@ -69,7 +146,7 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-    if (message.content[0] === '$'){
+    if (message.content[0] === '£'){
         const command = message.content.slice(1).split(' ')[0]
         const args = message.content.substring(message.content.indexOf(' ')+1).split(',,')
         console.log(args)
@@ -78,150 +155,100 @@ client.on('message', message => {
         }
         memeList.forEach((meme,i)=>{
             if(command === meme.name){
-                if(args.length === meme.textNames.length){
-                    eval(command)(message,args)
+                if(args.length === meme.textBoxes.length){
+                    createMeme(message, args, meme)
+                    // eval(command)(message,args) //carry out the meme function
                 } else {
-                    verify(message, meme.name, meme.textNames)
+                    verify(message, meme.name, meme.textBoxes)
                 }
             }
         })
     }
+    //use this for avatar urls
+    // message.channel.send(message.member.user.displayAvatarURL)
 });
 
-function verify(message, functionName, textNames){
+function verify(message, functionName, textBoxes){
     var formattedTextNames = ''
-    textNames.forEach((name)=>{
+    textBoxes.forEach((name)=>{
         formattedTextNames = formattedTextNames.concat(name , ',,')
     })
     formattedTextNames = formattedTextNames.slice(0,-2)
     message.channel.send(`Bep boop to use this command, type "$${functionName} *${formattedTextNames}*" Beeop bop`);
 }
 
-function handshake(message, args){
-    const firstText = [275,500]
-    const secondText = [680,390]
-    const thirdText = [380,100]
-    const textSize = [500,200]
-    sendImage(message, args, 'handshake.jpg', [firstText,secondText,thirdText], textSize)
-}
-
-function mchale(message, args){
-    const firstText = [410,150]
-    const secondText = [140,650]
-    const textSize = [250,400]
-    sendImage(message, args, 'mchale.jpg', [firstText,secondText], textSize)
-}
-
-function cryglasses(message, args){
-    const firstText = [80,20]
-    const textSize = [160,100]
-    sendImage(message, args, 'cryglasses.jpg', [firstText], textSize, 16)
-}
-
-function wtfamireading(message,args){
-    const firstText = [177,80]
-    const secondText = [200,681]
-    const textSize = [400,100]
-    sendImage(message, args, 'wtfamireading.png', [firstText,secondText], textSize)
-}
-
-function jasonface(message,args){
-    const firstText = [267,476]
-    const textSize = [400,100]
-    sendImage(message, args, 'jasonface.jpg', [firstText], textSize)
-}
-
-function lava(message,args){
-    const firstText = [380,80]
-    const secondText = [380,400]
-    const textSize = [400,400]
-    sendImage(message, args, 'lava.jpg', [firstText, secondText], textSize,  yAlign=Jimp.VERTICAL_ALIGN_TOP)
-}
-
-function burninghouse(message,args){
-    const firstText = [130,60]
-    const secondText = [230,310]
-    const textSize = [400,100]
-    sendImage(message, args, 'burninghouse.jpg', [firstText, secondText], textSize, 32)
-}
-
-function flextape(message,args){
-    const firstText = [600,500]
-    const secondText = [300,1610]
-    const textSize = [700,100]
-    sendImage(message, args, 'flextape.jpg', [firstText, secondText], textSize,128)
-}
-
-function nelson(message,args){
-    const firstText = [190,220]
-    const secondText = [530,500]
-    const textSize = [300,100]
-    sendImage(message, args, 'nelson.png', [firstText, secondText], textSize)
-}
-
-function wegetitdan(message,args){
-    const firstText = [370,670]
-    const textSize = [500,100]
-    sendImage(message, args, 'wegetitdan.jpg', [firstText], textSize)
-}
-
-function distracted(message,args){
-    const firstText = [190,280]
-    const secondText = [500,280]
-    const thirdText = [700,280]
-    const textSize = [200,300]
-    sendImage(message, args, 'distracted.jpg', [firstText,secondText,thirdText], textSize, yAlign=Jimp.VERTICAL_ALIGN_TOP)
-}
-
-
-
-
-
-
-function sendImage(message, args, image, textPositions, texboxSize, fontSize){
-    Jimp.read('images/' + image)
-    .then(function (image) {
-      loadedImage = image;
-      if (fontSize===16){
-        return Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
-      } else if (fontSize===32){
-        return Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
-    } else if (fontSize===128){
-        return Jimp.loadFont(Jimp.FONT_SANS_128_WHITE);
+function createMeme(message, args, meme){
+    //create the list of text locations
+    var textLocations = []
+    meme.textBoxes.forEach((textBox)=>{
+        if (textBox.textPosition){
+            textLocations.push(textBox.textPosition)
         } else {
-        return Jimp.loadFont(Jimp.FONT_SANS_64_WHITE);
-      }
+            textLocations.push(textBox.position)
+        }
     })
-    .then(function (font) {
-        addText(loadedImage, args, textPositions ,texboxSize, font)
-        const attachment = new Attachment('new.jpg');
-        message.channel.send(attachment);
-    })
-    .catch(function (err) {
-      console.error(err);
-    });
+    // =======================
+    console.log(textLocations)
+    sendImage(message, args, meme.name, textLocations, [150,100])
 
 }
 
-function addText(image, text, textPosition, textBoxSize, font, yAlign ){
-    yAlign = yAlign | Jimp.VERTICAL_ALIGN_MIDDLE
-    console.log(yAlign)
-    text.forEach((textContent,i)=>{
-        image.print(
-            font,
-            textPosition[i][0] - textBoxSize[0]/2, //x coordinate
-            textPosition[i][1] - textBoxSize[1]/2, //y coordinate
-            {
-                text: textContent,
-                alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-                alignmentY: yAlign
-            },
-            textBoxSize[0],
-            textBoxSize[1]
-        )
+function sendImage(message, text, image, textPositions, texboxSize, fontSize){
+    fontSize = fontSize || 20
+    
+    //load up image and canvas, then paste image onto canvas
+    var Image = Canvas.Image;
+    var img = new Image();
+    img.src = `resized images/${image}.jpg`;
+    const canvas = Canvas.createCanvas(img.width, img.height);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    //===================================
+    
+    
+    text.forEach((textContent, i)=>{
+        // Select the font size and type from one of the natively available fonts
+        ctx.font = `${fontSize}px comic sans MS`;
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = "center"; 
+        ctx.textAlign = "center"; 
+        // Actually fill the text with a solid color
+        wrapText(ctx, textContent, textPositions[i][0],textPositions[i][1], texboxSize[0],fontSize)
+        // ctx.fillText(textContent, textPositions[i][0],textPositions[i][1]);
     })
-    image.write('new.jpg');
-};
+    
+	// Use helpful Attachment class structure to process the file for you
+	const attachment = new Attachment(canvas.toBuffer(), 'welcome-image.png');
+
+	message.channel.send(attachment);
+
+
+}
+
+//copy and pasted from
+// https://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    var words = text.split(' ');
+    var line = '';
+
+    for(var n = 0; n < words.length; n++) {
+      var testLine = line + words[n] + ' ';
+      var metrics = context.measureText(testLine);
+      var testWidth = metrics.width;
+      if (testWidth > maxWidth && n > 0) {
+        context.fillText(line, x, y);
+        line = words[n] + ' ';
+        y += lineHeight;
+      }
+      else {
+        line = testLine;
+      }
+    }
+    context.fillText(line, x, y);
+  }
+
+
 
 // Log our bot in using the token from https://discordapp.com/developers/applications/me
-client.login(process.env.BOT_TOKEN);
+client.login('NjY3NDgxNDA5MTIzNzc4NjAw.XiDXXw.FaQmEXa_yqJs2fQGKpxFHVyOgAo');
+//client.login(process.env.BOT_TOKEN);
