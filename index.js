@@ -146,7 +146,7 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-    if (message.content[0] === '£'){
+    if (message.content[0] === '$'){
         const command = message.content.slice(1).split(' ')[0]
         const args = message.content.substring(message.content.indexOf(' ')+1).split(',,')
         console.log(args)
@@ -250,5 +250,5 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
 
 
 // Log our bot in using the token from https://discordapp.com/developers/applications/me
-client.login('NjY3NDgxNDA5MTIzNzc4NjAw.XiDXXw.FaQmEXa_yqJs2fQGKpxFHVyOgAo');
-//client.login(process.env.BOT_TOKEN);
+// client.login('NjY3NDgxNDA5MTIzNzc4NjAw.XiDXXw.FaQmEXa_yqJs2fQGKpxFHVyOgAo');
+client.login(process.env.BOT_TOKEN);
