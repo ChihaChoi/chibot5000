@@ -23,7 +23,7 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-    if (message.content[0] === '£'){
+    if (message.content[0] === '$'){
         const command = message.content.slice(1).split(' ')[0]
         const args = message.content.substring(message.content.indexOf(' ')+1).split(',,')
         console.log(args)
