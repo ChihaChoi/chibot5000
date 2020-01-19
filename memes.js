@@ -64,20 +64,26 @@ const memeList = [
         name:'lava',
         textBoxes: [{
             name: 'guy',
-            position: newCoord([380,80],602)
+            position: newCoord([280,50],602),
+            textPosition : newCoord([380,80],602),
+            size: [50,50]
         },{
             name: 'lava',
-            position: newCoord([380,400],602)
+            position: newCoord([380,400],602),
+            size: [150,150]
         }]
     },
     {
         name:'burninghouse',
         textBoxes: [{
             name: 'house',
-            position: newCoord([130,60],375)
+            position: newCoord([130,150],375),
+            textPosition: newCoord([130,60],375)
         },{
             name: 'kid',
-            position: newCoord([230,310],375)
+            position: newCoord([330,280],375),
+            textPosition: newCoord([230,310],375),
+            size: [150,100]
         }]
     },
     {
@@ -93,11 +99,12 @@ const memeList = [
     {
         name:'nelson',
         textBoxes: [{
-            name: 'nelson',
+            name: 'viewers',
             position: newCoord([190,220],705)
         },{
-            name: 'viewers',
-            position: newCoord([530,500],705)
+            name: 'nelson',
+            position: newCoord([530,300],705),
+            textPosition: newCoord([530,500],705)
         }]
     },
     {
@@ -118,6 +125,18 @@ const memeList = [
         },{
             name: 'gf',
             position: newCoord([700,280],450)
+        }]
+    },{
+        name: 'adam',
+        textBoxes: [{
+            name: 'adam',
+            position : [70,125]
+        },{
+            name: 'gift',
+            position: [300,130]
+        },{
+            name: 'god',
+            position: [390, 80]
         }]
     }
 ]
