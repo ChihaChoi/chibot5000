@@ -42,6 +42,8 @@ client.on('message', message => {
                 }
             }
         })
+    } else if (message.content.includes('liddard')){
+        message.channel.send('can we just all try to be nicer to one another as part of my new year resolution I just want less drama and more good vibes')
     }
 });
 
@@ -139,5 +141,6 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
 
 
 // Log our bot in using the token from https://discordapp.com/developers/applications/me
+client.login('NjY3MDYwMjA0Njc1OTIzOTg0.XiSAVw.g96bU9UtjTO4gd-QjxSMzJrtosw');
 
-client.login(process.env.BOT_TOKEN);
+// client.login(process.env.BOT_TOKEN);
