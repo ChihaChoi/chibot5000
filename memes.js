@@ -118,13 +118,17 @@ const memeList = [
         name: 'distracted',
         textBoxes: [{
             name: 'spicy piece of ass',
-            position :newCoord( [190,280],450)
+            position :newCoord( [190,180],450),
+            textPosition :newCoord( [190,280],450)
         },{
             name: 'bf',
-            position: newCoord([500,280],450)
+            position: newCoord([430,100],450),
+            textPosition: newCoord([500,180],450),
+            size : [70,70]
         },{
             name: 'gf',
-            position: newCoord([700,280],450)
+            position: newCoord([700,180],450),
+            textPosition: newCoord([700,280],450)
         }]
     },{
         name: 'adam',
