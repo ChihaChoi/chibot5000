@@ -141,6 +141,6 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
 
 
 // Log our bot in using the token from https://discordapp.com/developers/applications/me
-client.login('NjY3MDYwMjA0Njc1OTIzOTg0.Xid8vw.zwlo-ISDIJLE3fXXOe-vgt-DTHQ');
 
-// client.login(process.env.BOT_TOKEN);
+const botKey = require('./botKey')
+client.login(botKey || process.env.BOT_TOKEN);
