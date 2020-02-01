@@ -151,6 +151,15 @@ const memeList = [
             name: 'gun',
             position: [138,214]
         }]
+    },{
+        name: 'cat',
+        textBoxes: [{
+            name: 'knife',
+            position: [109,215]
+        },{
+            name: 'gun',
+            position: [420,69] //nice
+        }]
     }
 ]
 
