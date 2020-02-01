@@ -142,6 +142,15 @@ const memeList = [
             name: 'god',
             position: [390, 80]
         }]
+    },{
+        name: 'ambulance',
+        textBoxes: [{
+            name: 'knife',
+            position: [90,86]
+        },{
+            name: 'gun',
+            position: [138,214]
+        }]
     }
 ]
 
