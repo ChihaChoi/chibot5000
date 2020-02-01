@@ -36,11 +36,11 @@ const memeList = [
             name: 'lefthand',
             position: newCoord([275,500],645)
         },{
-            name: 'righthand',
-            position: newCoord([680,390],645)
-        },{
             name: 'handshake',
             position: newCoord([380,100],645)
+        },{
+            name: 'righthand',
+            position: newCoord([680,390],645)
         }]
     },
     {
