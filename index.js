@@ -110,7 +110,7 @@ function attachText(img, context, text, format){
      const yCoord = format.textPosition ?  format.textPosition[1] : format.position[1]
 
      context.font = `${fontSize}px comic sans MS`;
-     context.fillStyle = '#ffffff';
+     context.fillStyle = format.color || '#ffffff';
      context.textAlign = "center"; 
      context.textAlign = "center"; 
      // Actually fill the text with a solid color

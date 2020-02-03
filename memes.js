@@ -160,6 +160,17 @@ const memeList = [
             name: 'gun',
             position: [420,69] //nice
         }]
+    },{
+        name: 'cheer',
+        textBoxes: [{
+            name: 'top',
+            position: [86,74],
+            color: '#000000'
+        },{
+            name: 'bot',
+            position: [84,222], //nice
+            color: '#000000'
+        }]
     }
 ]
 
