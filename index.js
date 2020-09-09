@@ -9,8 +9,9 @@ const memeList = require("./memes");
 
 const liddardMessages = [
   "can we just all try to be nicer to one another as part of my new year resolution I just want less drama and more good vibes",
-  "it dont matter",
+  "it don't matter",
   "YAAAAOOOOOWWWWW",
+  ":yaow:",
 ];
 
 // populate list of memes for help function
