@@ -7,6 +7,13 @@ const fs = require("fs");
 
 const memeList = require("./memes");
 
+const liddardMessages = [
+  "can we just all try to be nicer to one another as part of my new year resolution I just want less drama and more good vibes",
+  "it dont matter",
+  "YAAAAOOOOOWWWWW",
+  ":liddard:",
+];
+
 // populate list of memes for help function
 var helpMessage = "supported images are:";
 memeList.forEach((e) => {
@@ -47,7 +54,7 @@ client.on("message", (message) => {
     });
   } else if (message.content.toLowerCase().includes("liddard")) {
     message.channel.send(
-      "can we just all try to be nicer to one another as part of my new year resolution I just want less drama and more good vibes"
+      liddardMessages[Math.floor(Math.random() * liddardMessages.length)]
     );
   } else if (message.content.toLowerCase().includes("good bot")) {
     message.channel.send(":blush:");
