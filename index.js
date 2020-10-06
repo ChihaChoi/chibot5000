@@ -91,7 +91,10 @@ function createMeme(message, args, meme) {
     } else if (textContent.slice(0, 3) === "<@!") {
       //obtain user id from inside mention
       userID = textContent.split("<@!")[1].split(">")[0];
-      avatarURL = message.guild.members.get(userID).user.displayAvatarURL;
+      avatarURL = message.guild.members.cache
+        .get(userID)
+        .user.displayAvatarURL()
+        .replace("webp", "png");
       attachImage(context, avatarURL, meme.textBoxes[i]);
     } else {
       attachText(backgroundImage, context, textContent, meme.textBoxes[i]);
